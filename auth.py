@@ -23,6 +23,9 @@ GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
 GITHUB_USER_URL = "https://api.github.com/user"
 GITHUB_EMAILS_URL = "https://api.github.com/user/emails"
 
+# Max age (seconds) for a GitHub OAuth "state" token before it's rejected.
+OAUTH_STATE_MAX_AGE = 600  # 10 minutes
+
 
 # ==============================================================================
 # SHARED CSS
@@ -490,7 +493,6 @@ def _init_auth_state() -> None:
     st.session_state.setdefault("auth_user", None)
     st.session_state.setdefault("auth_screen", "welcome")  # welcome | auth
     st.session_state.setdefault("auth_form", "login")        # login | signup (active pseudo-tab)
-    st.session_state.setdefault("_github_oauth_state", None)
 
 
 def is_authenticated() -> bool:
@@ -515,9 +517,47 @@ def _github_configured() -> bool:
     return bool(client_id and redirect_uri)
 
 
+def _state_signing_key() -> bytes:
+    # Any stable server-side secret works here. Reusing the GitHub client
+    # secret avoids needing a separate config value, but you can swap this
+    # for a dedicated APP_SECRET_KEY in st.secrets if you prefer.
+    key = _get_secret("GITHUB_CLIENT_SECRET", "") or "fallback-key-change-me"
+    return key.encode("utf-8")
+
+
+def _make_oauth_state() -> str:
+    """
+    Build a stateless, self-verifying 'state' token: nonce + timestamp + HMAC
+    signature. This avoids relying on st.session_state surviving the full
+    browser redirect round-trip to GitHub and back (which Streamlit Cloud
+    does not always preserve), since the token verifies itself on return.
+    """
+    nonce = secrets.token_urlsafe(16)
+    timestamp = str(int(time.time()))
+    payload = f"{nonce}.{timestamp}"
+    signature = hmac.new(_state_signing_key(), payload.encode("utf-8"), hashlib.sha256).hexdigest()
+    return f"{payload}.{signature}"
+
+
+def _verify_oauth_state(state: Optional[str]) -> bool:
+    if not state or state.count(".") != 2:
+        return False
+    nonce, timestamp, signature = state.split(".")
+    payload = f"{nonce}.{timestamp}"
+    expected_signature = hmac.new(_state_signing_key(), payload.encode("utf-8"), hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature, expected_signature):
+        return False
+    try:
+        issued_at = int(timestamp)
+    except ValueError:
+        return False
+    if time.time() - issued_at > OAUTH_STATE_MAX_AGE:
+        return False
+    return True
+
+
 def _github_authorize_url() -> str:
-    state = secrets.token_urlsafe(24)
-    st.session_state["_github_oauth_state"] = state
+    state = _make_oauth_state()
     params = {
         "client_id": _get_secret("GITHUB_CLIENT_ID", ""),
         "redirect_uri": _get_secret("GITHUB_REDIRECT_URI", ""),
@@ -584,8 +624,7 @@ def handle_oauth_callback() -> None:
     if not code:
         return
 
-    expected_state = st.session_state.get("_github_oauth_state")
-    if not expected_state or returned_state != expected_state:
+    if not _verify_oauth_state(returned_state):
         st.query_params.clear()
         st.error("GitHub sign-in could not be verified (state mismatch). Please try again.")
         return
@@ -605,7 +644,6 @@ def handle_oauth_callback() -> None:
         user = _find_or_create_github_user(profile, email)
 
     st.session_state["auth_user"] = user
-    st.session_state["_github_oauth_state"] = None
     st.query_params.clear()
     st.rerun()
 
