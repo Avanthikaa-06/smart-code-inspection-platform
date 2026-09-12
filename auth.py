@@ -945,3 +945,4 @@ def require_auth() -> bool:
     else:
         render_auth_page()
     return False
+    
