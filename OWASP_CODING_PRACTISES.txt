@@ -1,0 +1,63 @@
+OWASP SECURE CODING PRACTICES & VULNERABILITY MITIGATION
+
+1. Input Validation (OWASP A03:2021 - Injection):
+- Validate all incoming user data and untrusted input on the server side before any processing loops begin.
+- Enforce strict allow-lists defining expected inputs, and rigorously verify data type, character length, range boundaries, and structural format.
+
+2. Output Encoding (CWE-79 / OWASP A03:2025):
+- Encode all dynamic output correctly based on the rendering context (HTML body, JavaScript blocks, CSS attributes, and URL parameters).
+- Mechanically prevent Cross-Site Scripting (XSS) by neutralizing untrusted input before it reaches the browser shell.
+
+3. Authentication Security (CWE-307 / OWASP A07:2021):
+- Implement strong, slow cryptographic password hashing functions incorporating unique salts (e.g., bcrypt, scrypt, or argon2).
+- Avoid weak, broken algorithms such as MD5 or SHA-1 for identity security verification.
+- Enable Multi-Factor Authentication (MFA) across all authorization entry paths when possible.
+
+4. Session Management (OWASP A07:2021 - Identification Failures):
+- Generate secure, cryptographically random session IDs to defeat session fixation and guessing attacks.
+- Store active sessions inside secure cookies flagged with HttpOnly, Secure, and SameSite protection attributes.
+- Invalidate and destroy session identifiers completely on the server immediately after a user triggers a logout sequence.
+
+5. Access Control Boundaries (CWE-285 / OWASP A01:2021):
+- Perform strict server-side authorization checks on every inbound endpoint request and object access pathway.
+- Strictly adhere to the Principle of Least Privilege by restricting roles by default.
+
+6. Cryptographic Security (CWE-327 / CWE-338 / OWASP A02:2021):
+- Use trusted, modern cryptographic libraries rather than implementing custom encryption code logic.
+- Isolate and protect encryption keys securely using robust environment isolation or secrets managers.
+- Mandate cryptographically secure pseudo-random number generators (CSPRNG), such as SecureRandom, for all tokens and secrets.
+
+7. Error Handling and Logging (CWE-209 / OWASP A02:2021):
+- Expose only clean, generic error messages to end-users at the API layer.
+- Do not expose internal system details, environment configurations, or raw database stack traces on client screens.
+- Log security-relevant events, access failures, and privilege escalations to maintain an immutable monitoring audit trail.
+
+8. Data Protection Frameworks (OWASP A04:2021 - Insecure Design):
+- Encrypt sensitive data at rest using strong symmetric algorithms (AES-256) and in transit using modern protocols.
+- Avoid exposing sensitive information in plain text within source code repositories, configurations, or client-side storage layers.
+
+9. Communication Security (OWASP A02:2021 - Cryptographic Failures):
+- Enforce HTTPS and Transport Layer Security (TLS) globally for all sensitive network communications.
+- Validate certificates properly, reject self-signed configurations in production, and never disable SSL/TLS verification hooks (avoid verify=False).
+
+10. Database Security & Parameterization (CWE-89 / OWASP A03:2021):
+- Use parameterized queries and prepared statements globally for all database interactions.
+- Prevent SQL Injection attacks completely by isolating input arguments from executable command segments.
+- Connect to database clusters using least-privilege service accounts limited strictly to necessary table scopes.
+
+11. File Security and Storage (CWE-22 / OWASP A01:2021):
+- Validate all uploaded files thoroughly on the backend, checking true magic-byte headers rather than just extensions.
+- Restrict permitted file types to a safe allow-list and secure storage locations outside the web server root.
+
+12. General Engineering Practices (CWE-78 / OWASP A06:2021):
+- Build applications exclusively upon trusted, actively maintained software frameworks and dependency libraries.
+- Keep dependencies updated and run automated Software Composition Analysis (SCA) tools to patch vulnerabilities.
+- Avoid executing low-level system commands via runtime shells (e.g., os.system, shell=True) using unvalidated user inputs.
+
+CORE ATTRIBUTE PRINCIPLES:
+- Confidentiality: Protecting data data boundaries from unauthorized eyes.
+- Integrity: Safeguarding information from unauthorized modification loops.
+- Availability: Assuring reliable access pathways to authorized entities.
+- Least Privilege: Defaulting operational permissions to the narrowest viable scope.
+- Defense in Depth: Layering diverse protection boundaries to counter isolated component failures.
+- Secure by Default: Keeping access pathways locked unless explicitly authorized.

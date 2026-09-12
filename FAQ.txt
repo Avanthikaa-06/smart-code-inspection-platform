@@ -1,0 +1,76 @@
+SECURITY FREQUENTLY ASKED QUESTIONS (FAQ)
+
+Q1. What is SQL Injection (SQLi)?
+A. SQL Injection is an injection vulnerability where attackers insert malicious SQL commands into application inputs to bypass authentication, access, modify, or delete database data (CWE-89 / OWASP A03:2021-Injection).
+Prevention:
+- Use parameterized queries and prepared statements
+- Validate and sanitize input variables eagerly
+- Apply the principle of least privilege to database connections
+
+Q2. What is Cross-Site Scripting (XSS)?
+A. XSS occurs when an application includes untrusted data in a web page without proper validation or escaping, allowing attackers to inject malicious scripts into web browsers viewed by end-users (CWE-79 / OWASP A03:2025).
+Prevention:
+- Context-aware output encoding
+- Rigorous input validation
+- Implement a strict Content Security Policy (CSP)
+
+Q3. What is Broken Access Control?
+A. Broken Access Control allows unauthorized users to view, modify, or delete resources beyond their intended privileges or administrative permissions (CWE-285 / OWASP A01:2021).
+Prevention:
+- Enforce rigid server-side authorization checks
+- Deny access to routes and objects by default
+- Apply the principle of least privilege
+
+Q4. What is Multi-Factor Authentication (MFA)?
+A. MFA requires users to provide two or more distinct verification factors before accessing an account to protect identity boundaries (OWASP A07:2021).
+Benefits:
+- Significantly improves user account security
+- Mitigates unauthorized access from compromised plain-text passwords
+
+Q5. Why should parameterized queries be used?
+A. Parameterized queries separate SQL code templates from user input variables entirely, rendering SQL Injection attacks mechanically impossible because inputs are treated strictly as data literals, not executable code commands.
+
+Q6. What is the Principle of Least Privilege?
+A. Users, processes, and applications should only be granted the minimal operational permissions absolutely necessary to perform their designated tasks.
+
+Q7. What is Secure Coding?
+A. Secure coding is the foundational engineering practice of designing and developing software that protects data assets and natively resists security vulnerabilities and malicious cyber-attacks.
+
+Q8. Why is input validation important?
+A. Input validation prevents attackers from submitting malicious scripts, buffer overruns, path traversal characters, or unexpected data payloads to an application before processing loops start.
+
+Q9. Why should passwords not be stored in plain text?
+A. Plain text passwords can be easily stolen in a database breach. Passwords must be run through strong cryptographic one-way hashing algorithms incorporating unique salts, such as BCrypt, SCrypt, or Argon2 (CWE-307).
+
+Q10. What is Encryption?
+A. Encryption converts readable plain text data into ciphertext using a key to protect confidentiality at rest (AES-256) and in transit (TLS/HTTPS).
+
+Q11. What is SecureRandom?
+A. SecureRandom is a cryptographically strong pseudo-random number generator (CSPRNG) used for tokens, session IDs, and key generation where standard random utilities are too predictable (CWE-338).
+
+Q12. What is OWASP?
+A. OWASP (Open Worldwide Application Security Project) is a global non-profit organization that provides vendor-neutral security tools, training materials, and the definitive top 10 vulnerability tracking lists.
+
+Q13. What is Defense in Depth?
+A. Defense in Depth is an architectural design paradigm that implements multiple layered security controls so that the absolute failure of a single control point does not compromise the security of the entire system.
+
+Q14. Why is HTTPS important?
+A. HTTPS uses Transport Layer Security (TLS) to encrypt all communications between the client web browser and application servers, preventing man-in-the-middle data interception and sniffing attacks.
+
+Q15. What are secure coding best practices?
+A. Essential secure coding best practices include: input validation, secure authentication, parameterized queries, encryption, secure error handling, and dependency tracking.
+
+Q16. What is a Security Misconfiguration?
+A. Security Misconfiguration occurs when applications use insecure default settings, leave verbose debug logs enabled in production settings, or fail to define secure CORS headers (OWASP A02:2021).
+
+Q17. What is Cryptographic Failure?
+A. Cryptographic Failure occurs when sensitive data is exposed due to weak encryption algorithms (such as MD5 or SHA1), missing encryption, or poor key management (CWE-327 / OWASP A02:2021).
+
+Q18. Why are software updates important?
+A. Regular software updates fix critical underlying security vulnerabilities, patch software bugs, and improve system defenses against active exploits.
+
+Q19. What is a software supply chain attack?
+A. A supply chain attack targets vulnerable third-party open-source libraries, package dependencies, or automated build tools used by an application to compromise the final system (OWASP A06:2021).
+
+Q20. Why is logging important in security?
+A. Secure, tamper-proof logging helps teams rapidly detect ongoing attacks, investigate past breaches, maintain clear compliance audit trails, and debug errors securely.

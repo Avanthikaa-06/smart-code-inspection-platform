@@ -1,0 +1,37 @@
+JAVA SECURE CODING PRACTICES & GUIDELINES
+
+1. Input Validation and Data Handling (OWASP A03:2021 - Injection):
+All untrusted user input must be validated at the API boundary using Bean Validation annotations such as @NotNull, @Size, and @Pattern. Developers should enforce allow-lists defining expected input formats rather than relying on weak blocklists of dangerous characters. Proper boundary validation prevents injection attacks, cross-site scripting (XSS), and invalid data processing forks.
+
+2. Database Security & Parameterization (CWE-89 / OWASP A03:2021):
+Applications must always use PreparedStatement with bind parameters instead of building SQL query strings dynamically through string concatenation loops. Dynamic SQL execution blocks inside stored procedures should also be strictly avoided. All database connection architectures should manage lifecycles using pooling frameworks such as HikariCP and closely follow the principle of least privilege.
+
+3. Secrets and Configuration Management (CWE-798 / OWASP A07:2021):
+Credentials, private keys, and environment tokens must never be hardcoded in Java source code files or properties configuration containers committed to version control systems. Sensitive application configurations should be managed using environment variables, externalized runtime configurations, or dedicated secret management systems. Sensitive configuration data must be encrypted at rest.
+
+4. Cryptography and Password Security (CWE-327 / CWE-338 / OWASP A02:2021):
+Security-sensitive token generations, salts, or cryptographic operations must utilize java.security.SecureRandom instead of standard java.util.Random utilities to prevent predictability flaws. Passwords must be hashed using robust algorithms like BCrypt, SCrypt, or Argon2. Legacy weak hash functions such as MD5 and SHA-1 are broken and must not be used for security purposes. Always rely on established provider engines instead of custom crypto code.
+
+5. Secure Deserialization Protections (CWE-502 / OWASP A08:2021):
+Native Java object deserialization via ObjectInputStream must be avoided for untrusted network incoming streams as it presents severe Remote Code Execution (RCE) vectors. Standardized, safe data transfer formats like JSON or Protocol Buffers are preferred. If deserialization is structurally required, implement explicit java.io.ObjectInputFilter configurations to enforce class allow-listing.
+
+6. Error Handling and Exception Management (CWE-209 / OWASP A02:2021):
+Applications must catch specific exception contexts rather than using broad, generic Exception catch blocks. Empty catch blocks must be avoided completely as they hide runtime failures. Error payload messages returned to client endpoints must be strictly generic, while verbose stack traces and debugging details must be logged securely on the backend server layout. Eagerly adopt try-with-resources blocks to manage and automatically release system resources to prevent leaks.
+
+7. Access Control Frameworks (CWE-285 / OWASP A01:2021):
+Access control boundaries should be built using robust, peer-reviewed infrastructure platforms like Spring Security. Developers must follow the principle of least privilege globally and avoid exposing internal object references (IDOR prevention). Deploy explicit Data Transfer Objects (DTOs) to abstract and protect raw internal database entities.
+
+8. Dependency Management (OWASP A06:2021 - Vulnerable Components):
+Third-party package dependencies must be strictly version-pinned and managed using build lifecycle managers like Maven or Gradle. Build pipelines must regularly incorporate Software Composition Analysis (SCA) utilities such as OWASP Dependency-Check or Snyk. Remove unused dependencies to minimize the application attack surface.
+
+9. General Secure Coding Practices (CWE-78 / OWASP A03:2021):
+Developers must avoid invoking Runtime.getRuntime().exec() or ProcessBuilder routines containing unvalidated user arguments due to OS Command Injection risks. Emphasize immutable object configurations to guarantee predictable thread-safety. Integrate static application security testing (SAST) tools like SpotBugs and Find Security Bugs directly into the CI/CD engineering lifecycle.
+
+KEY CORE PRINCIPLES:
+- Input Validation boundary filtering
+- Least Privilege asset scoping
+- Secure Authentication identity validation
+- Secure Cryptography algorithm deployment
+- Dependency Security and tracking
+- Secure Error Handling without data leaks
+- Secure Configuration Management segregation

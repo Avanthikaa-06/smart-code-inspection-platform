@@ -1,0 +1,23 @@
+SOFTWARE SECURITY BEST PRACTICES
+1. Least Privilege: Grant only the operational permissions required to perform specific tasks.
+2. Input Validation: Validate and sanitize all incoming user input before execution to prevent cross-site scripting (XSS).
+3. Secure Authentication: Use strong cryptographic password hashing (bcrypt/argon2) and Multi-Factor Authentication (MFA).
+4. Data Protection: Encrypt sensitive data at rest and in transit using secure TLS configurations.
+5. Parameterized Queries: Always use prepared statements instead of string concatenation to prevent SQL Injection (CWE-89).
+6. Session Security: Use secure session IDs, enforce HttpOnly flags, and invalidate sessions after logout.
+7. Software Updates: Keep operating systems, third-party libraries, and software frameworks updated.
+8. Secure Error Handling: Show generic errors to users and log granular stack trace details securely to prevent info leaks.
+9. Logging and Monitoring: Record security-relevant events and monitor logs for suspicious system activities.
+10. Dependency Management: Use trusted libraries and regularly scan software packages for vulnerabilities.
+11. Secure Configuration: Remove default credentials, change default passwords, and disable unnecessary ports/services.
+12. Code Reviews and Testing: Perform static code reviews, vulnerability assessments, and dynamic security testing.
+13. Backup and Recovery: Maintain secure, encrypted backups and test system recovery procedures regularly.
+14. Secure Development Lifecycle: Integrate application security controls throughout design, testing, and deployment.
+15. Defense in Depth: Deploy multiple layers of security controls so that the failure of one component doesn't compromise the system.
+16. Fail Securely: Protect application states, clear secrets from memory, and deny access when runtime errors occur.
+
+KEY SECURITY PRINCIPLES:
+- Confidentiality: Ensuring data is accessible only to authorized entities.
+- Integrity: Safeguarding the accuracy and completeness of codebase information.
+- Availability: Ensuring authorized users have reliable access to resources.
+- Secure by Default: Restricting access pathways automatically unless explicitly allowed.

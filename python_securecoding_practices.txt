@@ -1,0 +1,34 @@
+PYTHON SECURE CODING PRACTICES & PIPELINE STANDARDS
+
+1. Input Validation and Data Handling (OWASP A03:2021 - Injection):
+All external input, including user web input, file uploads, and external API responses, must be strictly validated before processing. Developers should explicitly verify data types, range metrics, character lengths, and regex formats. Allow-list boundary validation is structurally preferred over weak deny-list filtering. When parsing string literals safely, use ast.literal_eval() instead of the dangerous raw eval() function, which allows arbitrary code execution.
+
+2. Database Security & Parameterization (CWE-89 / OWASP A03:2021):
+Applications must always use parameterized queries and prepared statements instead of building SQL statements through dynamic string concatenation, python f-strings, or percent (%) formatting. Object-Relational Mappers (ORMs) such as SQLAlchemy or Django ORM should be prioritized because they natively execute parameterized statements. Database service accounts must rigidly follow the principle of least privilege.
+
+3. Secrets and Configuration Management (CWE-798 / OWASP A07:2021):
+API keys, database passwords, secret keys, and access tokens must never be hardcoded into Python source files. Environment variables (os.environ) or external secrets management systems should be used instead. Sensitive configuration files such as .env must be added to gitignore and never committed to version control. Production systems should use dedicated enterprise secrets management vaults.
+
+4. Cryptography and Password Security (CWE-327 / CWE-338 / OWASP A02:2021):
+The built-in 'secrets' module must be used for all security-sensitive random generations, such as session IDs, salts, and password reset tokens, instead of the predictable 'random' module. Passwords must be cryptographically hashed using slow algorithms like bcrypt, Argon2, or Passlib. Legacy weak algorithms such as MD5 and SHA-1 must not be used for security purposes. All encryption routines must rely on trusted cryptographic libraries like 'cryptography'.
+
+5. Secure Deserialization Protections (CWE-502 / OWASP A08:2021):
+The pickle.loads() method must never be executed on untrusted input data because it allows arbitrary object reconstruction and immediate Remote Code Execution (RCE). Standardized, structured JSON formats should be heavily preferred for all data exchange between distributed services.
+
+6. Error Handling and Logging (CWE-209 / CWE-755 / OWASP A02:2021):
+Applications must catch specific exception targets (e.g., ValueError, KeyError) instead of using risky bare except: blocks that hide system crashes. Granular stack traces and internal environment system details must never be exposed to end users in production environments. Output logs must be systematically sanitized to ensure they never contain plain-text passwords, secrets, tokens, or sensitive user information.
+
+7. Dependency Management (OWASP A06:2021 - Vulnerable Components):
+Application dependency versions must be strictly pinned inside requirements.txt or locked securely using dependency lock files. Software Composition Analysis (SCA) tools such as pip-audit, Safety, or Snyk should be run regularly within build pipelines. Virtual environments (venv) should always be used to cleanly isolate project dependencies.
+
+8. General Secure Coding Practices (CWE-78 / OWASP A03:2021):
+Use explicit type hints (typing module) to improve overall code structure and reduce edge-case bugs. Integrate static application security testing (SAST) utilities like Bandit to detect common security vulnerabilities during local development. Avoid passing shell=True inside subprocess execution methods (like subprocess.Popen or subprocess.run) when handling untrusted user input; always pass command arguments as an isolated list of strings instead.
+
+KEY CORE PIPELINE PRINCIPLES:
+- Input Validation allow-listing
+- Least Privilege asset restriction
+- Secure Authentication credential processing
+- Secure Configuration Management segregation
+- Secure Cryptography CSPRNG utilization
+- Secure Error Handling without leakage
+- Dependency Security pinning and auditing
