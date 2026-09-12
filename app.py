@@ -453,6 +453,166 @@ div[data-testid="stVerticalBlockBorderWrapper"]:not(.st-key-sticky_nav_container
     border-color: rgba(167,139,250,0.22) !important;
 }
 
+/* ================================================================
+   GLOBAL DARK THEME — remaining native Streamlit widgets
+   These components don't inherit the app's custom card/button
+   styling by default, so they're targeted explicitly here to match
+   the rest of the dark purple theme.
+   ================================================================ */
+
+/* Base text/link colors app-wide */
+.stApp, .stMarkdown, p, span, label, .stCaption, [data-testid="stMarkdownContainer"] {
+    color: #E2E8F0;
+}
+a, a:visited { color: #C4B5FD; }
+a:hover { color: #F0ABFC; }
+
+/* File uploader dropzone */
+[data-testid="stFileUploaderDropzone"] {
+    background: rgba(35, 20, 66, 0.55) !important;
+    border: 1.5px dashed rgba(167, 139, 250, 0.35) !important;
+    border-radius: 14px !important;
+}
+[data-testid="stFileUploaderDropzone"] * {
+    color: #E2E8F0 !important;
+}
+[data-testid="stFileUploaderDropzone"] small {
+    color: #A5B4CF !important;
+}
+[data-testid="stFileUploaderDropzone"] button {
+    background: rgba(124, 58, 237, 0.25) !important;
+    color: #F8FAFC !important;
+    border: 1px solid rgba(167, 139, 250, 0.4) !important;
+    border-radius: 8px !important;
+}
+[data-testid="stFileUploaderDropzone"] button:hover {
+    background: rgba(124, 58, 237, 0.4) !important;
+}
+[data-testid="stFileUploaderFile"] {
+    background: rgba(35, 20, 66, 0.55) !important;
+    border-radius: 8px !important;
+}
+[data-testid="stFileUploaderFile"] * {
+    color: #E2E8F0 !important;
+}
+
+/* Native tabs (st.tabs outside the custom severity-tab-scope) */
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(167, 139, 250, 0.2) !important;
+    gap: 6px;
+}
+[data-testid="stTabs"] [data-baseweb="tab"] {
+    background: rgba(35, 20, 66, 0.45) !important;
+    color: #C3CEEA !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+[data-testid="stTabs"] [aria-selected="true"] {
+    background: rgba(124, 58, 237, 0.35) !important;
+    color: #F8FAFC !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+    background-color: #A78BFA !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab-panel"] {
+    color: #E2E8F0;
+}
+
+/* Selectbox / multiselect / dropdown menus */
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] div[data-baseweb="select"] > div {
+    background-color: rgba(30, 20, 60, 0.55) !important;
+    color: #F8FAFC !important;
+    border-color: rgba(167,139,250,0.22) !important;
+}
+div[data-baseweb="popover"] ul,
+div[data-baseweb="menu"] {
+    background-color: #1E1433 !important;
+    color: #F8FAFC !important;
+}
+div[data-baseweb="popover"] li:hover,
+div[data-baseweb="menu"] li:hover {
+    background-color: rgba(124, 58, 237, 0.25) !important;
+}
+
+/* Expanders */
+[data-testid="stExpander"] {
+    background: rgba(35, 20, 66, 0.45) !important;
+    border: 1px solid rgba(167, 139, 250, 0.18) !important;
+    border-radius: 12px !important;
+}
+[data-testid="stExpander"] summary,
+[data-testid="stExpander"] p {
+    color: #F1F5F9 !important;
+}
+
+/* Alerts: info / warning / error / success */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    background: rgba(35, 20, 66, 0.55) !important;
+    color: #F1F5F9 !important;
+    border: 1px solid rgba(167, 139, 250, 0.18) !important;
+}
+[data-testid="stAlertContentInfo"] { color: #93C5FD !important; }
+[data-testid="stAlertContentWarning"] { color: #FBBF24 !important; }
+[data-testid="stAlertContentError"] { color: #FB7185 !important; }
+[data-testid="stAlertContentSuccess"] { color: #4ADE80 !important; }
+
+/* Toasts */
+[data-testid="stToast"] {
+    background: rgba(30, 20, 60, 0.95) !important;
+    color: #F8FAFC !important;
+    border: 1px solid rgba(167,139,250,0.25) !important;
+}
+
+/* Dataframes / tables */
+[data-testid="stDataFrame"], [data-testid="stTable"] {
+    background: rgba(26, 16, 48, 0.5) !important;
+    color: #E2E8F0 !important;
+    border-radius: 10px !important;
+}
+
+/* Progress bar */
+[data-testid="stProgress"] > div > div {
+    background-color: rgba(124, 58, 237, 0.9) !important;
+}
+[data-testid="stProgress"] {
+    background: rgba(35, 20, 66, 0.4) !important;
+    border-radius: 999px !important;
+}
+
+/* Metric widget (st.metric) */
+[data-testid="stMetric"] {
+    background: rgba(26, 16, 48, 0.5);
+    border: 1px solid rgba(167, 139, 250, 0.14);
+    border-radius: 12px;
+    padding: 0.6rem 0.8rem;
+}
+[data-testid="stMetricLabel"] { color: #C3CEEA !important; }
+[data-testid="stMetricValue"] { color: #F8FAFC !important; }
+
+/* Popover container */
+[data-testid="stPopoverBody"] {
+    background: #1E1433 !important;
+    border: 1px solid rgba(167, 139, 250, 0.25) !important;
+    color: #F8FAFC !important;
+}
+
+/* Code blocks */
+[data-testid="stCodeBlock"], pre, code {
+    background-color: #150B2E !important;
+    color: #E2E8F0 !important;
+}
+
+/* Checkbox / radio / slider labels */
+[data-testid="stCheckbox"] label, [data-testid="stRadio"] label {
+    color: #E2E8F0 !important;
+}
+[data-testid="stSlider"] label { color: #E2E8F0 !important; }
+
+/* Spinner text */
+[data-testid="stSpinner"] p { color: #C3CEEA !important; }
+
 /* ---------- Sub-tab button row ---------- */
 .subtab-row-marker { margin-bottom: 0.35rem; }
 div[data-testid="stHorizontalBlock"] > div .stButton>button {
@@ -1986,4 +2146,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+
 
